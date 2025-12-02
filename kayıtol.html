@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PerdeArkası - Kayıt Ol</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(45deg, #360525, #611f3c);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        .register-container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 450px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .register-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .register-header h1 {
+            color: #ffffff;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .register-header p {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1.1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.8rem;
+            color: #ffffff;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        .form-group .input-with-icon {
+            position: relative;
+        }
+
+        .form-group .input-with-icon i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #611f3c;
+            font-size: 1.2rem;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 1rem 1rem 1rem 3rem;
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            color: #333;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            background: #ffffff;
+            box-shadow: 0 0 0 3px rgba(139, 21, 70, 0.3);
+        }
+
+        .terms-privacy {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            color: #ffffff;
+        }
+
+        .terms-privacy input[type="checkbox"] {
+            margin-top: 0.3rem;
+            accent-color: #611f3c;
+        }
+
+        .register-btn {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(45deg, #58173f, #b84f80);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 1.5rem;
+        }
+
+        .register-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(139, 21, 70, 0.4);
+        }
+
+        .register-btn:active {
+            transform: translateY(0);
+        }
+
+        .social-register {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .social-register p {
+            color: #ffffff;
+            margin-bottom: 1rem;
+        }
+
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .social-icon {
+            width: 45px;
+            height: 45px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .social-icon:hover {
+            background: #b84f80;
+            transform: translateY(-3px);
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 1.5rem;
+            color: #ffffff;
+        }
+
+        .login-link a {
+            color: #b84f80;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .login-link a:hover {
+            color: #ffffff;
+        }
+
+        @media (max-width: 480px) {
+            .register-container {
+                padding: 2rem;
+            }
+
+            .register-header h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="register-container">
+        <div class="register-header">
+            <h1>PerdeArkası</h1>
+            <p>Yeni hesap oluşturun</p>
+        </div>
+        <form id="registerForm">
+            <div class="form-group">
+                <label for="fullname">Ad Soyad</label>
+                <div class="input-with-icon">
+                    <i class="fas fa-user"></i>
+                    <input type="text" id="fullname" name="fullname" placeholder="Adınız ve soyadınız" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="email">E-posta</label>
+                <div class="input-with-icon">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" id="email" name="email" placeholder="E-posta adresiniz" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="password">Şifre</label>
+                <div class="input-with-icon">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="password" name="password" placeholder="Şifreniz" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="confirmPassword">Şifre Tekrar</label>
+                <div class="input-with-icon">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Şifrenizi tekrar girin" required>
+                </div>
+            </div>
+            <div class="terms-privacy">
+                <input type="checkbox" id="terms" name="terms" required>
+                <label for="terms">Kullanım şartlarını ve gizlilik politikasını kabul ediyorum</label>
+            </div>
+            <button type="submit" class="register-btn">Kayıt Ol</button>
+            <div class="social-register">
+                <p>Sosyal medya ile kayıt ol</p>
+                <div class="social-icons">
+                    <a href="https://accounts.google.com/signin" target="_blank" class="social-icon google">
+                        <i class="fab fa-google"></i>
+                    </a>
+                    <a href="https://www.facebook.com/login" target="_blank" class="social-icon facebook">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    <a href="https://twitter.com/login" target="_blank" class="social-icon twitter">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="login-link">
+                Zaten hesabınız var mı? <a href="gıırıs.html">Giriş Yap</a>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const fullname = document.getElementById('fullname').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const terms = document.getElementById('terms').checked;
+            
+            // Form doğrulama
+            if (!fullname || !email || !password || !confirmPassword) {
+                alert('Lütfen tüm alanları doldurun.');
+                return;
+            }
+
+            // E-posta formatı kontrolü
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                alert('Lütfen geçerli bir e-posta adresi girin.');
+                return;
+            }
+
+            // Şifre eşleşme kontrolü
+            if (password !== confirmPassword) {
+                alert('Şifreler eşleşmiyor.');
+                return;
+            }
+
+            // Şifre güvenlik kontrolü (en az 8 karakter, bir büyük harf, bir küçük harf ve bir rakam)
+            const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+            if (!passwordRegex.test(password)) {
+                alert('Şifreniz en az 8 karakter uzunluğunda olmalı ve en az bir büyük harf, bir küçük harf ve bir rakam içermelidir.');
+                return;
+            }
+
+            // Kullanım şartları kontrolü
+            if (!terms) {
+                alert('Devam etmek için kullanım şartlarını kabul etmelisiniz.');
+                return;
+            }
+
+            // Başarılı kayıt simülasyonu
+            console.log('Kayıt bilgileri:', { fullname, email, password });
+            alert('Kayıt işleminiz başarıyla tamamlandı! Giriş sayfasına yönlendiriliyorsunuz.');
+            window.location.href = 'gıırıs.html';
+        });
+    </script>
+</body>
+</html>

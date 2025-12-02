@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PerdeArkası - Diziler</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: #360525;
+            color: #ffffff;
+            line-height: 1.6;
+        }
+
+        /* Navbar Stilleri */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.2rem 5%;
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.7));
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .logo h1 {
+            color: #611f3c;
+            font-size: 2.5rem;
+            font-weight: 800;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            letter-spacing: 1px;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: #ffffff;
+            text-decoration: none;
+            margin: 0 1.2rem;
+            font-size: 1.1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: #651f3e;
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after,
+        .nav-links a.active::after {
+            width: 100%;
+        }
+
+        .user-actions button {
+            padding: 0.7rem 1.5rem;
+            margin-left: 1rem;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .search-btn {
+            background: none;
+            color: white;
+            font-size: 1.3rem;
+            padding: 0.5rem;
+        }
+
+        .login-btn {
+            background-color: transparent;
+            color: white;
+            border: 2px solid white !important;
+        }
+
+        .login-btn:hover {
+            background-color: rgba(52, 9, 26, 0.1);
+        }
+
+        .register-btn {
+            background: linear-gradient(45deg, #58173f, #b84f80);
+            color: white;
+            box-shadow: 0 4px 15px rgba(139, 21, 70, 0.3);
+        }
+
+        .register-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(136, 33, 81, 0.4);
+        }
+
+        /* Ana İçerik */
+        main {
+            margin-top: 100px;
+            padding: 2rem 5%;
+        }
+
+        /* Filtreler */
+        .filters {
+            background: linear-gradient(45deg, #1a1a1a, #2a2a2a);
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            animation: fadeInUp 1s ease;
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 30px;
+            background: linear-gradient(45deg, #2c1720, #4a1f33);
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .filter-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(139, 21, 70, 0.3);
+        }
+
+        .filter-btn.active {
+            background: linear-gradient(45deg, #58173f, #b84f80);
+            box-shadow: 0 4px 15px rgba(139, 21, 70, 0.3);
+        }
+
+        /* Dizi Grid */
+        .diziler-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 2rem;
+            animation: fadeInUp 1s ease 0.2s;
+            opacity: 0;
+            animation-fill-mode: forwards;
+        }
+
+        .dizi-card {
+            position: relative;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .dizi-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 25px rgba(139, 21, 70, 0.3);
+        }
+
+        .dizi-image {
+            width: 100%;
+            height: 320px;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .dizi-card:hover .dizi-image {
+            transform: scale(1.05);
+        }
+
+        .dizi-info {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 1.2rem;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.7));
+            backdrop-filter: blur(5px);
+        }
+
+        .dizi-info h3 {
+            color: white;
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .dizi-info p {
+            color: #ccc;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .dizi-rating {
+            color: #ffd700;
+            font-size: 1rem;
+        }
+
+        /* Animasyonlar */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Kategoriler Menü Stilleri */
+        .nav-menu {
+            position: relative;
+            margin: 0 1.2rem;
+        }
+
+        .menu-btn {
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 1.1rem;
+            font-weight: 500;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .menu-btn i {
+            transition: transform 0.3s ease;
+        }
+
+        .menu-btn.active i {
+            transform: rotate(180deg);
+        }
+
+        .menu-content {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 250px;
+            background: #1a1a1a;
+            border-radius: 8px;
+            overflow: hidden;
+            max-height: 0;
+            transition: max-height 0.3s ease-out;
+            opacity: 0;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            margin-top: 0.5rem;
+        }
+
+        .menu-content.show {
+            max-height: 400px;
+            opacity: 1;
+        }
+
+        .menu-content a {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 0.8rem 1.2rem;
+            color: white;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+            margin: 0;
+        }
+
+        .menu-content a:hover {
+            background: linear-gradient(45deg, #58173f, #b84f80);
+        }
+
+        .menu-content i {
+            width: 20px;
+            text-align: center;
+        }
+
+        /* Arama Overlay Stilleri */
+        .search-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 2000;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding-top: 10%;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(8px);
+        }
+
+        .search-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .search-container {
+            width: 80%;
+            max-width: 700px;
+            position: relative;
+            animation: fadeInDown 0.5s ease forwards;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 1.2rem 1.5rem;
+            padding-right: 4rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50px;
+            color: white;
+            font-size: 1.2rem;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            border-color: #b84f80;
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 0 20px rgba(184, 79, 128, 0.3);
+        }
+
+        .search-input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .search-submit {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: linear-gradient(45deg, #58173f, #b84f80);
+            border: none;
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .search-submit:hover {
+            transform: translateY(-50%) scale(1.05);
+            box-shadow: 0 0 15px rgba(184, 79, 128, 0.5);
+        }
+
+        .search-close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .search-close:hover {
+            color: #b84f80;
+            transform: rotate(90deg);
+        }
+
+        .search-results {
+            margin-top: 2rem;
+            background: rgba(26, 26, 26, 0.8);
+            border-radius: 15px;
+            padding: 1.5rem;
+            max-height: 400px;
+            overflow-y: auto;
+            display: none;
+        }
+
+        .search-results.show {
+            display: block;
+            animation: fadeInUp 0.5s ease forwards;
+        }
+
+        .search-result-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            margin-bottom: 0.5rem;
+        }
+
+        .search-result-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .search-result-image {
+            width: 80px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .search-result-info h4 {
+            color: white;
+            margin-bottom: 0.5rem;
+        }
+
+        .search-result-info p {
+            color: #ccc;
+            font-size: 0.9rem;
+        }
+
+        .search-result-rating {
+            color: #ffd700;
+            margin-top: 0.5rem;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 2rem;
+            color: #ccc;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                padding: 1rem;
+            }
+
+            .nav-links {
+                margin: 1.5rem 0;
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                flex-direction: column;
+                align-items: stretch;
+                width: 100%;
+            }
+
+            .nav-links a {
+                margin: 0.5rem;
+            }
+
+            .user-actions {
+                margin-top: 1rem;
+            }
+
+            .diziler-grid {
+                grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            }
+
+            .nav-menu {
+                width: 100%;
+                margin: 0.5rem 0;
+            }
+
+            .menu-content {
+                position: static;
+                width: 100%;
+                margin-top: 0;
+                border-radius: 0;
+            }
+
+            .menu-btn {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .search-container {
+                width: 90%;
+            }
+
+            .search-overlay {
+                padding-top: 20%;
+            }
+
+            .search-result-item {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .search-result-image {
+                width: 100px;
+                height: 150px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo">
+                <h1>PerdeArkası</h1>
+            </div>
+            <div class="nav-links">
+                <a href="index.html" class="active">Ana Sayfa</a>
+                <a href="dızıler.html">Diziler</a>
+                <a href="fılmler.html">Filmler</a>
+                <div class="nav-menu">
+                    <button class="menu-btn">
+                        Kategoriler
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="menu-content">
+                        <a href="dram.html"><i class="fas fa-theater-masks"></i>Dram</a>
+                        <a href="komedı.html"><i class="fas fa-laugh-squint"></i>Komedi</a>
+                        <a href="korku.html"><i class="fas fa-ghost"></i>Korku</a>
+                        <a href="aksıyon.html"><i class="fas fa-running"></i>Aksiyon</a>
+                        <a href="anımasyon.html"><i class="fas fa-child"></i>Animasyon</a>
+                    </div>
+                </div>
+            </div>
+            <div class="user-actions">
+                <button class="search-btn"><i class="fas fa-search"></i></button>
+                <button class="login-btn" onclick="window.location.href='gıırıs.html'">Giriş Yap</button>
+                <button class="register-btn" onclick="window.location.href='kayıtol.html'">Üye Ol</button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Arama Overlay -->
+    <div class="search-overlay">
+        <button class="search-close"><i class="fas fa-times"></i></button>
+        <div class="search-container">
+            <form id="searchForm">
+                <div class="search-input-container">
+                    <input type="text" class="search-input" placeholder="Film, dizi veya kategori ara..." id="searchInput">
+                    <button type="submit" class="search-submit"><i class="fas fa-search"></i></button>
+                </div>
+            </form>
+            <div class="search-results">
+                <!-- Arama sonuçları buraya dinamik olarak eklenecek -->
+            </div>
+        </div>
+    </div>
+
+    <main>
+        
+
+        <div class="diziler-grid">
+            
+
+
+            <div class="dizi-card" data-trailer="https://www.youtube.com/watch?v=CZ0B22z22pI">
+                <img src="../image/mrmrssmith.jpeg" alt="mrmrssmith" class="dizi-image">
+                <div class="play-button-overlay">
+                    <div class="play-button">
+                        <i class="fas fa-play"></i>
+                    </div>
+                </div>
+                <div class="dizi-info">
+                    <h3>Mr. & Mrs. Smith</h3>
+                    <p>Aksiyon</p>
+                    <div class="dizi-rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="far fa-star"></i>
+                        <span>7.5</span>
+                    </div>
+                </div>
+            </div>
+
+            
+
+            <div class="dizi-card">
+                <img src="../image/glad.jpg" alt="Gladyatör" class="dizi-image">
+                <div class="dizi-info">
+                    <h3>Gladyatör</h3>
+                    <p>Aksiyon</p>
+                    <div class="dizi-rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <span>9.0</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dizi-card">
+                <img src="../image/matrix.jpg" alt="Matrix" class="dizi-image">
+                <div class="dizi-info">
+                    <h3>Matrix</h3>
+                    <p>Aksiyon</p>
+                    <div class="dizi-rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <span>9.0</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Daha fazla dizi kartı eklenebilir -->
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Filtre butonları için işlev
+        document.querySelectorAll('.filter-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                document.querySelector('.filter-btn.active').classList.remove('active');
+                this.classList.add('active');
+            });
+        });
+
+        // Kategoriler menüsü için işlev
+        document.addEventListener('DOMContentLoaded', function() {
+            const menuBtn = document.querySelector('.menu-btn');
+            const menuContent = document.querySelector('.menu-content');
+            
+            // Menüyü aç/kapa
+            menuBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                this.classList.toggle('active');
+                menuContent.classList.toggle('show');
+            });
+
+            // Sayfa herhangi bir yerine tıklandığında menüyü kapat
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.nav-menu')) {
+                    menuBtn.classList.remove('active');
+                    menuContent.classList.remove('show');
+                }
+            });
+
+            // Kategori seçildiğinde menüyü kapat
+            menuContent.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    menuBtn.classList.remove('active');
+                    menuContent.classList.remove('show');
+                }
+            });
+        });
+
+        // Arama işlevselliği
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchBtn = document.querySelector('.search-btn');
+            const searchOverlay = document.querySelector('.search-overlay');
+            const searchClose = document.querySelector('.search-close');
+            const searchForm = document.getElementById('searchForm');
+            const searchInput = document.getElementById('searchInput');
+            const searchResults = document.querySelector('.search-results');
+            
+            // Arama butonuna tıklandığında overlay'i aç
+            searchBtn.addEventListener('click', function() {
+                searchOverlay.classList.add('active');
+                searchInput.focus();
+                document.body.style.overflow = 'hidden'; // Sayfanın kaydırılmasını engelle
+            });
+            
+            // Kapat butonuna tıklandığında overlay'i kapat
+            searchClose.addEventListener('click', function() {
+                searchOverlay.classList.remove('active');
+                searchResults.classList.remove('show');
+                searchInput.value = '';
+                document.body.style.overflow = ''; // Sayfanın kaydırılmasını tekrar etkinleştir
+            });
+            
+            // ESC tuşuna basıldığında overlay'i kapat
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && searchOverlay.classList.contains('active')) {
+                    searchOverlay.classList.remove('active');
+                    searchResults.classList.remove('show');
+                    searchInput.value = '';
+                    document.body.style.overflow = '';
+                }
+            });
+            
+            // Arama formunu gönderme
+            searchForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const searchTerm = searchInput.value.trim().toLowerCase();
+                
+                if (searchTerm.length < 2) {
+                    alert('Lütfen en az 2 karakter girin.');
+                    return;
+                }
+                
+                performSearch(searchTerm);
+            });
+            
+            // Arama işlemi
+            function performSearch(searchTerm) {
+                // Gerçek bir uygulamada burada API çağrısı yapılır
+                // Şimdilik mevcut dizileri filtreleyerek gösterelim
+                
+                // Tüm dizi kartlarını al
+                const diziCards = document.querySelectorAll('.dizi-card');
+                const results = [];
+                
+                // Dizi kartlarını filtrele
+                diziCards.forEach(card => {
+                    const title = card.querySelector('h3').textContent.toLowerCase();
+                    const genre = card.querySelector('p').textContent.toLowerCase();
+                    const imgSrc = card.querySelector('img').src;
+                    const rating = card.querySelector('.dizi-rating span').textContent;
+                    
+                    if (title.includes(searchTerm) || genre.includes(searchTerm)) {
+                        results.push({
+                            title: card.querySelector('h3').textContent,
+                            genre: card.querySelector('p').textContent,
+                            imgSrc: imgSrc,
+                            rating: rating
+                        });
+                    }
+                });
+                
+                // Sonuçları göster
+                displaySearchResults(results, searchTerm);
+            }
+            
+            // Arama sonuçlarını gösterme
+            function displaySearchResults(results, searchTerm) {
+                searchResults.innerHTML = '';
+                
+                if (results.length === 0) {
+                    searchResults.innerHTML = `
+                        <div class="no-results">
+                            <i class="fas fa-search" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.5;"></i>
+                            <h3>"${searchTerm}" için sonuç bulunamadı.</h3>
+                            <p>Farklı anahtar kelimeler deneyebilir veya kategorilere göz atabilirsiniz.</p>
+                        </div>
+                    `;
+                } else {
+                    const resultHeader = document.createElement('h2');
+                    resultHeader.textContent = `"${searchTerm}" için ${results.length} sonuç bulundu`;
+                    resultHeader.style.color = 'white';
+                    resultHeader.style.marginBottom = '1.5rem';
+                    resultHeader.style.fontSize = '1.2rem';
+                    searchResults.appendChild(resultHeader);
+                    
+                    results.forEach(result => {
+                        const resultItem = document.createElement('div');
+                        resultItem.className = 'search-result-item';
+                        
+                        resultItem.innerHTML = `
+                            <img src="${result.imgSrc}" alt="${result.title}" class="search-result-image">
+                            <div class="search-result-info">
+                                <h4>${result.title}</h4>
+                                <p>${result.genre}</p>
+                                <div class="search-result-rating">
+                                    <i class="fas fa-star"></i> ${result.rating}
+                                </div>
+                            </div>
+                        `;
+                        
+                        resultItem.addEventListener('click', function() {
+                            // Dizi detay sayfasına yönlendirme (gerçek uygulamada)
+                            alert(`${result.title} detay sayfasına yönlendiriliyorsunuz...`);
+                        });
+                        
+                        searchResults.appendChild(resultItem);
+                    });
+                }
+                
+                searchResults.classList.add('show');
+            }
+        });
+    </script>
+</body>
+</html>
